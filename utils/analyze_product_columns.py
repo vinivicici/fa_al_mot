@@ -5,6 +5,7 @@ articles_with_price.csv에서 product 관련 칼럼들의 고유값을 분석하
 
 import pandas as pd
 from collections import Counter
+import os
 
 def analyze_product_columns():
     print("=== articles_with_price.csv의 product 칼럼 분석 ===")
@@ -46,6 +47,11 @@ def analyze_product_columns():
         # 결과를 CSV 파일들로 저장
         print(f"\n=== CSV 파일 생성 중 ===")
         
+        # 출력 폴더 생성
+        output_dir = 'column_observation'
+        os.makedirs(output_dir, exist_ok=True)
+        print(f"📁 '{output_dir}' 폴더 생성 완료")
+        
         # 1. 전체 요약 파일
         summary_data = []
         for col, info in column_analysis.items():
@@ -57,7 +63,7 @@ def analyze_product_columns():
             })
         
         summary_df = pd.DataFrame(summary_data)
-        summary_df.to_csv('product_columns_summary.csv', index=False)
+        summary_df.to_csv(f'{output_dir}/product_columns_summary.csv', index=False)
         print("✅ product_columns_summary.csv 생성 완료")
         
         # 2. 각 칼럼별 상세 파일들
@@ -73,7 +79,7 @@ def analyze_product_columns():
             
             detail_df = pd.DataFrame(detail_data)
             filename = f"product_{col}_details.csv"
-            detail_df.to_csv(filename, index=False)
+            detail_df.to_csv(f'{output_dir}/{filename}', index=False)
             print(f"✅ {filename} 생성 완료 ({len(detail_data)}개 고유값)")
         
         # 3. 통합 분석 파일 (모든 칼럼의 상위 값들)
@@ -92,7 +98,7 @@ def analyze_product_columns():
                 })
         
         all_df = pd.DataFrame(all_analysis)
-        all_df.to_csv('product_all_analysis.csv', index=False)
+        all_df.to_csv(f'{output_dir}/product_all_analysis.csv', index=False)
         print("✅ product_all_analysis.csv 생성 완료")
         
         # 결과 요약 출력
@@ -103,7 +109,7 @@ def analyze_product_columns():
             print(f"  - 고유값: {info['unique_count']}개")
             print(f"  - 상위 3개: {list(info['top_values'].keys())[:3]}")
         
-        print(f"\n생성된 파일들:")
+        print(f"\n생성된 파일들 ({output_dir}/ 폴더):")
         print(f"  - product_columns_summary.csv (전체 요약)")
         print(f"  - product_all_analysis.csv (통합 분석)")
         for col in column_analysis.keys():

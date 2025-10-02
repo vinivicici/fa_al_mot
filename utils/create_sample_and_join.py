@@ -52,8 +52,8 @@ def create_sample_transactions():
     print(sample_df[['article_id', 'price']].to_string(index=False))
     
     # 저장
-    sample_df.to_csv('new_sample_transactions.csv', index=False)
-    print("\n샘플 데이터가 'new_sample_transactions.csv'에 저장되었습니다.")
+    sample_df.to_csv('sample_transactions.csv', index=False)
+    print("\n샘플 데이터가 'sample_transactions.csv'에 저장되었습니다.")
     
     return sample_df
 
@@ -148,7 +148,6 @@ def verify_results(sample_df, article_avg_prices, articles_df):
             print(f"Article ID {article_id}: 평균 가격 계산 안됨")
 
 def main():
-    print("가격 매칭 문제 해결을 위한 정확한 처리 시작")
     print("=" * 60)
     
     # 1. 샘플 생성
