@@ -20,7 +20,8 @@ def drop_columns():
             'colour_group_code', 'colour_group_name', 'perceived_colour_value_id',
             'perceived_colour_value_name', 'perceived_colour_master_id', 
             'perceived_colour_master_name', 'department_no', 'index_code',
-            'index_group_no', 'section_no', 'garment_group_no'
+            'index_group_no', 'section_no', 'garment_group_no', 'graphical_appearance_name',
+            'department_name', 'index_name'
         ]
         
         # 실제로 존재하는 칼럼들만 필터링
@@ -50,13 +51,13 @@ def drop_columns():
         # 결과 저장
         output_file = 'articles_with_price.csv'
         df_dropped.to_csv(output_file, index=False)
-        print(f"\n✅ 칼럼 제거 완료!")
+        print(f"\n[완료] 칼럼 제거 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")
         
         return True
         
     except Exception as e:
-        print(f"❌ 오류 발생: {e}")
+        print(f"[오류] 오류 발생: {e}")
         return False
 
 if __name__ == "__main__":

@@ -110,6 +110,9 @@ image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jp
   - index_group_no
   - section_no
   - garment_group_no
+  - graphical_appearance_name
+  - department_name
+  - index_name
 **SIZE 추가 드랍**
 **one-hot vector 빨리 할 것**
 **img file name을 클러스터링할때 
@@ -117,14 +120,16 @@ image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jp
     product_code: 567992
     product_type_name: T-shirt
     product_group_name: Garment Upper body
-    //graphical_appearance_name: Front print
-    //department_name: Young Girl Jersey Fancy
-    //index_name: Children Sizes 134-170
     index_group_name: Baby/Children
     section_name: Young Girl
     garment_group_name: Jersey Fancy
     detail_desc: Short-sleeved top in printed cotton jersey.
     price: 0.0067627118644067
 
-이상치 커팅:
-    가격에 관해 아래쪽으로 확률분포에서 많이 벗어나면(지나치게 다른값에 비해 싸면) 특수 할인으로 간주하고 드랍
+이상치 커팅: 아직 수행 X
+
+문제1: garment_group_name, product_type_name이 서로 스타일을 나타내서 비슷하고, index_group_name, section_name 이 착용자의 성별, 나이를 나타냄. 
+중분류-소분류 관계인데 어떻게 처리할지(하나가 다른 하나에 포함관계)
+예를 들어, 여성복 - 여성 중간 가격대 시리즈
+만약 중분류만 사용하면 모델 성능이 처참할 가능성이 높고, 소분류를 사용하면 다른 데이터셋이랑 병합이 거의 불가능에 가까워짐
+우선은 다 놔두고 원핫인코딩으로 처리만 해놓음
