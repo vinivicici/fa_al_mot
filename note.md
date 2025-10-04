@@ -22,37 +22,7 @@ Article ID 568601007 (가장 극단적인 케이스):
 
 3. column list정리
 
-## 세 파일의 칼럼 정보
-
-### 1. articles_with_price.csv (105,542 행 x 26 칼럼)
-```
-article_id, product_code, prod_name, product_type_no, product_type_name, 
-product_group_name, graphical_appearance_no, graphical_appearance_name, 
-colour_group_code, colour_group_name, perceived_colour_value_id, 
-perceived_colour_value_name, perceived_colour_master_id, perceived_colour_master_name, 
-department_no, department_name, index_code, index_name, index_group_no, 
-index_group_name, section_no, section_name, garment_group_no, garment_group_name, 
-detail_desc, price
-```
-
-
-### 2. styles.csv (44,448 행 x 10 칼럼)
-```
-id, gender, masterCategory, subCategory, articleType, baseColour, 
-season, year, usage, productDisplayName
-```
-
-
-### 3. farfetch.csv (141 행 x 18 칼럼)
-```
-url, title, brand, price, currency, formatted_price, availability, 
-item_id, sku, condition, images, description, breadcrumbs, gender, 
-details, uniq_id, scraped_at, image_file
-```
-
-
-
-## 실제 데이터 샘플 (랜덤 추출)
+## 실제 데이터 샘플
 
 ### 1. articles_with_price.csv 샘플 (행 15795/105542)
 ```
@@ -122,3 +92,44 @@ uniq_id: 84fbee69-8de5-56c6-8132-ab9799cc2029
 scraped_at: 14/10/2022 11:58:30
 image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jpg | images/16654437_3.jpg
 ```
+
+4. 칼럼 셀렉션
+제거할 칼럼들 (15개):
+  - prod_name
+  - article_id
+  - product_type_no
+  - graphical_appearance_no
+  - colour_group_code
+  - colour_group_name
+  - perceived_colour_value_id
+  - perceived_colour_value_name
+  - perceived_colour_master_id
+  - perceived_colour_master_name
+  - department_no
+  - index_code
+  - index_group_no
+  - section_no
+  - garment_group_no
+  - graphical_appearance_name
+  - department_name
+  - index_name
+**SIZE 추가 드랍**
+**one-hot vector 빨리 할 것**
+**img file name을 클러스터링할때 
+  남은 칼럼들 (제거 후):
+    product_code: 567992
+    product_type_name: T-shirt
+    product_group_name: Garment Upper body
+    index_group_name: Baby/Children
+    section_name: Young Girl
+    garment_group_name: Jersey Fancy
+    detail_desc: Short-sleeved top in printed cotton jersey.
+    price: 0.0067627118644067
+
+이상치 커팅: 아직 수행 X
+
+문제1: garment_group_name, product_type_name이 서로 스타일을 나타내서 비슷하고, index_group_name, section_name 이 착용자의 성별, 나이를 나타냄. 
+중분류-소분류 관계인데 어떻게 처리할지(하나가 다른 하나에 포함관계)
+예를 들어, 여성복 - 여성 중간 가격대 시리즈
+만약 중분류만 사용하면 모델 성능이 처참할 가능성이 높고, 소분류를 사용하면 다른 데이터셋이랑 병합이 거의 불가능에 가까워짐
+우선은 다 놔두고 원핫인코딩으로 처리만 해놓음
