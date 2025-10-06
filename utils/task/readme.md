@@ -12,16 +12,18 @@
 ---
 
 ## 📁 파일 구조
-├── data_loader.py       # Parquet 파일에서 데이터셋을 로드하고 분할합니다.
-├── clustering.py        # 이미지 임베딩에 대한 비지도 클러스터링을 수행합니다.
-├── classification.py    # 다양한 분류 모델을 사용해 상품 'style'을 예측합니다.
-├── regression.py        # 다양한 회귀 모델을 사용해 상품 'price'를 예측합니다.
+├── data_loader.py    # Parquet 파일에서 데이터셋을 로드하고 분할합니다.\
+├── clustering.py     # 이미지 임베딩에 대한 비지도 클러스터링을 수행합니다.\
+├── classification.py # 다양한 분류 모델을 사용해 상품 'style'을 예측합니다.\
+└── regression.py     # 다양한 회귀 모델을 사용해 상품 'price'를 예측합니다.\
 
 ## ⚙️ 설정 및 사용법
 ### 1. 필요 라이브러리 설치
 먼저, 필요한 파이썬 라이브러리가 설치되어 있는지 확인하세요.
 ```bash
-pip install pandas numpy scikit-learn matplotlib seaborn pyarrow
+pip install pandas numpy scikit-learn matplotlib seaborn pyarro
+```
+
 (참고: pyarrow는 pandas에서 Parquet 파일을 읽기 위해 필요합니다.)
 ### 2. 데이터 준비
 스크립트를 실행하기 전, 반드시 데이터셋 경로를 지정해야 합니다.
@@ -34,12 +36,15 @@ pip install pandas numpy scikit-learn matplotlib seaborn pyarrow
 클러스터링 작업을 실행하려면:
 ```bash
 python clustering.py
+```
 분류 작업을 실행하려면:
 ```bash
 python classification.py
+```
 회귀 작업을 실행하려면:
 ```bash
 python regression.py
+```
 
 ### **3. 모델과 평가지표 (전체)**
 ### 1. 클러스터링 (clustering.py)
