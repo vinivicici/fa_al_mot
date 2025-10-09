@@ -15,7 +15,7 @@ def one_hot_encode_categories():
     try:
         # CSV 파일 로드
         print("\n1. CSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"원본 데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 원핫인코딩할 칼럼들
@@ -86,7 +86,7 @@ def one_hot_encode_categories():
                 print(f"    - {col}")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         print(f"\n6. 결과 저장 중...")
         df_final.to_csv(output_file, index=False)
         print(f"[완료] 원핫인코딩 완료!")

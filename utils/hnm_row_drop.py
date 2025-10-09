@@ -15,7 +15,7 @@ def remove_specific_sections():
     try:
         # CSV 파일 로드
         print("CSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"원본 데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 제거할 section_name 값들
@@ -43,7 +43,7 @@ def remove_specific_sections():
         print(f"제거 후 데이터 크기: {df_filtered.shape[0]:,} 행 x {df_filtered.shape[1]} 칼럼")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         df_filtered.to_csv(output_file, index=False)
         print(f"\n[완료] 행 제거 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")
@@ -62,7 +62,7 @@ def remove_specific_product_groups():
     try:
         # CSV 파일 로드
         print("CSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"원본 데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 제거할 product_group_name 값들
@@ -94,7 +94,7 @@ def remove_specific_product_groups():
         print(f"제거 후 데이터 크기: {df_filtered.shape[0]:,} 행 x {df_filtered.shape[1]} 칼럼")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         df_filtered.to_csv(output_file, index=False)
         print(f"\n[완료] 행 제거 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")
@@ -113,7 +113,7 @@ def remove_specific_garment_groups():
     try:
         # CSV 파일 로드
         print("CSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"원본 데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 제거할 garment_group_name 값들
@@ -136,7 +136,7 @@ def remove_specific_garment_groups():
         print(f"제거 후 데이터 크기: {df_filtered.shape[0]:,} 행 x {df_filtered.shape[1]} 칼럼")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         df_filtered.to_csv(output_file, index=False)
         print(f"\n[완료] 행 제거 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")
@@ -163,7 +163,7 @@ def rescale_price(scale_factor=1000):
     try:
         # CSV 파일 로드
         print("CSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 원본 가격 통계
@@ -190,7 +190,7 @@ def rescale_price(scale_factor=1000):
             print(f"  - {row['product_type_name']}: {row['price']:.2f}")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         df.to_csv(output_file, index=False)
         print(f"\n[완료] 가격 스케일링 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")

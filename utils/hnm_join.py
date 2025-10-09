@@ -15,7 +15,7 @@ def calculate_article_prices():
     article_counts = {}
     
     chunk_num = 0
-    for chunk in pd.read_csv('transactions_train.csv', chunksize=chunk_size):
+    for chunk in pd.read_csv('dataset/hnm/transactions_train.csv', chunksize=chunk_size):
         chunk_num += 1
         print(f"  청크 {chunk_num} 처리 중... (크기: {len(chunk):,})")
         
@@ -44,7 +44,7 @@ def join_articles_with_prices(article_avg_prices):
     print("\n=== 2. articles.csv와 가격 데이터 JOIN ===")
     
     # articles.csv 로드
-    articles_df = pd.read_csv('articles.csv')
+    articles_df = pd.read_csv('dataset/hnm/articles.csv')
     print(f"  articles.csv 로드: {len(articles_df):,}개 행")
     
     # price 칼럼 추가
@@ -120,7 +120,7 @@ def merge_by_product_code(articles_df):
         print(f"    - 결측값: {merged_df['price'].isna().sum():,}개")
     
     # 저장
-    output_file = 'articles_with_price.csv'
+    output_file = 'dataset/hnm/articles_with_price.csv'
     merged_df.to_csv(output_file, index=False)
     print(f"\n[완료] 병합 완료! 결과가 '{output_file}'에 저장되었습니다.")
     

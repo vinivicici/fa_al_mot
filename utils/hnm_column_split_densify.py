@@ -15,7 +15,7 @@ def remove_product_group_column():
     try:
         # CSV 파일 로드
         print("\nCSV 파일 로딩 중...")
-        df = pd.read_csv('articles_with_price.csv')
+        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
         print(f"원본 데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
         
         # 현재 칼럼 목록
@@ -39,7 +39,7 @@ def remove_product_group_column():
         print(f"\n최종 데이터 크기: {df_filtered.shape[0]:,} 행 x {df_filtered.shape[1]} 칼럼")
         
         # 결과 저장
-        output_file = 'articles_with_price.csv'
+        output_file = 'dataset/hnm/articles_with_price.csv'
         df_filtered.to_csv(output_file, index=False)
         print(f"\n[완료] 칼럼 제거 완료!")
         print(f"결과가 '{output_file}'에 저장되었습니다.")

@@ -61,7 +61,7 @@ def main():
     
     # 필수 파일 확인
     print("\n1. 필수 파일 확인...")
-    required_files = ['articles.csv', 'transactions_train.csv']
+    required_files = ['dataset/hnm/articles.csv', 'dataset/hnm/transactions_train.csv']
     missing_files = []
     
     for file in required_files:
@@ -113,9 +113,9 @@ def main():
     print(f"소요 시간: {elapsed_time:.1f}초 ({elapsed_time/60:.1f}분)")
     
     # 최종 파일 확인
-    if os.path.exists('articles_with_price.csv'):
-        size = os.path.getsize('articles_with_price.csv') / (1024**2)  # MB
-        print(f"\n최종 출력 파일: articles_with_price.csv ({size:.1f} MB)")
+    if os.path.exists('dataset/hnm/articles_with_price.csv'):
+        size = os.path.getsize('dataset/hnm/articles_with_price.csv') / (1024**2)  # MB
+        print(f"\n최종 출력 파일: dataset/hnm/articles_with_price.csv ({size:.1f} MB)")
     else:
         print("\n[경고] 최종 출력 파일을 찾을 수 없습니다.")
 

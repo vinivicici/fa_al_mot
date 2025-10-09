@@ -15,13 +15,13 @@ def analyze_json_quickly():
     try:
         # 파일 크기 확인
         import os
-        file_size = os.path.getsize('farfetch.json')
+        file_size = os.path.getsize('dataset/hnm/farfetch.json')
         print(f"파일 크기: {file_size / (1024*1024):.1f} MB")
         
         # 첫 몇 개 항목만 로드하여 구조 파악
         print("첫 3개 항목 구조 분석 중...")
         
-        with open('farfetch.json', 'r', encoding='utf-8') as f:
+        with open('dataset/hnm/farfetch.json', 'r', encoding='utf-8') as f:
             # 첫 부분만 읽어서 구조 파악
             content = f.read(10000)  # 10KB만 읽기
             
@@ -85,7 +85,7 @@ def convert_to_csv_streaming():
     try:
         # 전체 JSON 로드 (메모리 사용량 주의)
         print("JSON 파일 로딩 중...")
-        with open('farfetch.json', 'r', encoding='utf-8') as f:
+        with open('dataset/hnm/farfetch.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         print(f"총 {len(data):,}개 항목 로드 완료")
@@ -106,14 +106,14 @@ def convert_to_csv_streaming():
         
         # articles_with_price.csv 칼럼 확인
         try:
-            articles_df = pd.read_csv('articles_with_price.csv', nrows=3)
+            articles_df = pd.read_csv('dataset/hnm/articles_with_price.csv', nrows=3)
             print(f"articles_with_price.csv 칼럼: {list(articles_df.columns)}")
         except:
             print("articles_with_price.csv 읽기 실패")
         
         # styles.csv 칼럼 확인  
         try:
-            styles_df = pd.read_csv('styles.csv', nrows=3)
+            styles_df = pd.read_csv('dataset/hnm/styles.csv', nrows=3)
             print(f"styles.csv 칼럼: {list(styles_df.columns)}")
         except:
             print("styles.csv 읽기 실패")
@@ -134,7 +134,7 @@ def convert_to_csv_streaming():
             print("명확한 연결 키를 찾을 수 없음")
         
         # CSV로 저장
-        output_filename = 'farfetch.csv'
+        output_filename = 'dataset/hnm/farfetch.csv'
         print(f"\n{output_filename}으로 저장 중...")
         df.to_csv(output_filename, index=False)
         

@@ -1,11 +1,11 @@
 files:
 1. h&m
-2. farfetch
-3. fashion images
+2. fashion images
 
 flow
 1) h&m dataset 합치기(transactions_train.csv, articles.csv)
 2) column selection
+3) fashion images를 병합
 
 ---------------------------------------------------------------------
 1. h&m dataset 합치기
@@ -131,5 +131,9 @@ image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jp
 문제1: garment_group_name, product_type_name이 서로 스타일을 나타내서 비슷하고, index_group_name, section_name 이 착용자의 성별, 나이를 나타냄. 
 중분류-소분류 관계인데 어떻게 처리할지(하나가 다른 하나에 포함관계)
 예를 들어, 여성복 - 여성 중간 가격대 시리즈
+
+-> 소분류를 드랍하기로 결정 (section_name과 product_type_name column 드랍)
 만약 중분류만 사용하면 모델 성능이 처참할 가능성이 높고, 소분류를 사용하면 다른 데이터셋이랑 병합이 거의 불가능에 가까워짐
 우선은 다 놔두고 원핫인코딩으로 처리만 해놓음
+
+
