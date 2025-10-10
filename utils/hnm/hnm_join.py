@@ -66,7 +66,7 @@ def merge_by_product_code(articles_df):
     
     # product_code 칼럼 확인
     if 'product_code' not in articles_df.columns:
-        print("❌ 'product_code' 칼럼이 존재하지 않습니다.")
+        print("[오류] 'product_code' 칼럼이 존재하지 않습니다.")
         return articles_df
     
     # 원본 product_code 개수

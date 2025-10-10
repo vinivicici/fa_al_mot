@@ -8,7 +8,6 @@ articles.csv와 transactions_train.csv를 전처리하여 최종 데이터셋 �
 2. hnm_column_drop.py - 불필요한 칼럼 제거
 3. hnm_row_drop.py - 불필요한 행 제거 (악세서리, 속옷 등) + 가격 스케일링
 4. hnm_column_split_densify.py - product_group_name 칼럼 제거
-5. hnm_one_hot_encode.py - 카테고리 칼럼 원핫인코딩
 """
 
 import sys
@@ -28,8 +27,8 @@ def run_script(script_path, script_name):
             [sys.executable, script_path],
             capture_output=True,
             text=True,
-            encoding='utf-8',
-            errors='replace'  # 디코딩 에러 무시
+            encoding='cp949',  # Windows 콘솔 인코딩 사용
+            errors='replace'   # 디코딩 에러 무시
         )
         
         # 출력 표시
@@ -79,11 +78,10 @@ def main():
     
     # 스크립트 목록 (실행 순서대로)
     scripts = [
-        ("utils/hnm_join.py", "1. JOIN - articles + 가격 데이터 병합"),
-        ("utils/hnm_column_drop.py", "2. COLUMN DROP - 불필요한 칼럼 제거"),
-        ("utils/hnm_row_drop.py", "3. ROW DROP - 불필요한 행 제거 + 가격 스케일링"),
-        ("utils/hnm_column_split_densify.py", "4. COLUMN SPLIT - product_group_name 제거"),
-        ("utils/hnm_one_hot_encode.py", "5. ONE-HOT ENCODE - 카테고리 칼럼 인코딩"),
+        ("utils/hnm/hnm_join.py", "1. JOIN - articles + 가격 데이터 병합"),
+        ("utils/hnm/hnm_column_drop.py", "2. COLUMN DROP - 불필요한 칼럼 제거"),
+        ("utils/hnm/hnm_row_drop.py", "3. ROW DROP - 불필요한 행 제거 + 가격 스케일링"),
+        ("utils/hnm/hnm_column_split_densify.py", "4. COLUMN SPLIT - product_group_name 제거"),
     ]
     
     # 각 스크립트 실행

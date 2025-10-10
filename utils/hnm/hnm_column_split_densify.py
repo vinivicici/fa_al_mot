@@ -28,7 +28,7 @@ def remove_product_group_column():
             df_filtered = df.drop(columns=['product_group_name'])
             print(f"\n[완료] 'product_group_name' 칼럼 제거 완료!")
         else:
-            print(f"\n⚠️ 'product_group_name' 칼럼이 존재하지 않습니다.")
+            print(f"\n[경고] 'product_group_name' 칼럼이 존재하지 않습니다.")
             df_filtered = df
         
         # 제거 후 칼럼 목록

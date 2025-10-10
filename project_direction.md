@@ -10,15 +10,12 @@ flow
 ---------------------------------------------------------------------
 1. h&m dataset 합치기
 - transactions_train.csv에선 price만 필요
-- 어떠한 article에 대해 가격이 다른 경우가 있음 -> 평균 가격 채택 (이 부분은 이상치 커팅등 다른 데이터 처리 방식을 사용해도 좋을 것 같음)
+- 어떠한 article에 대해 가격이 다른 경우가 있음 -> 평균 가격 채택 (과한 세일 아래쪽 이상치 커팅 사용)
 Article ID 568601007 (가장 극단적인 케이스):
 총 8,446개 거래
 350개의 서로 다른 가격!
 최저: 0.01354237, 최고: 0.05083051 (약 3.7배 차이)
 평균: 0.04556165
-
-2. farfetch
-.json이라 .csv로 변환
 
 3. column list정리
 
@@ -71,34 +68,14 @@ usage: Casual
 productDisplayName: Puma Women Solid Black Jackets
 ```
 
-### 3. farfetch.csv 샘플 (행 92/141)
-```
-url: https://www.farfetch.com/shopping/men/dsquared2-high-shine-lace-up-shoes-item-16654437.aspx
-title: high-shine lace-up shoes
-brand: Dsquared2
-price: 775.0
-currency: USD
-formatted_price: $775
-availability: In Stock
-item_id: 16654437
-sku: 16654437
-condition: NewCondition
-images: https://cdn-images.farfetch-contents.com/16/65/44/37/16654437_32716111_1000.jpg, ...
-description: Looking great from head to toes is easy with Dsquared2. In a high-shine finish, these lace-up shoes are a simple yet refined option for your next formal event. Smarten up.
-breadcrumbs: Men, Dsquared2, Shoes
-gender: Men
-details: [HTML 상세 정보 - 매우 긴 내용]
-uniq_id: 84fbee69-8de5-56c6-8132-ab9799cc2029
-scraped_at: 14/10/2022 11:58:30
-image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jpg | images/16654437_3.jpg
-```
+4. 칼럼 셀렉션 (utils/hnm_column_drop.py 방식 참고)
 
-4. 칼럼 셀렉션
-제거할 칼럼들 (15개):
+제거할 칼럼 목록(실제로 존재하는 컬럼만 제거, 미존재 컬럼은 무시):
   - prod_name
   - article_id
   - product_type_no
   - graphical_appearance_no
+  - graphical_appearance_name
   - colour_group_code
   - colour_group_name
   - perceived_colour_value_id
@@ -106,34 +83,50 @@ image_file: images/16654437_0.jpg | images/16654437_1.jpg | images/16654437_2.jp
   - perceived_colour_master_id
   - perceived_colour_master_name
   - department_no
+  - department_name
   - index_code
+  - index_name
   - index_group_no
   - section_no
   - garment_group_no
-  - graphical_appearance_name
-  - department_name
-  - index_name
-**SIZE 추가 드랍**
-**one-hot vector 빨리 할 것**
-**img file name을 클러스터링할때 
-  남은 칼럼들 (제거 후):
-    product_code: 567992
-    product_type_name: T-shirt
-    product_group_name: Garment Upper body
-    index_group_name: Baby/Children
-    section_name: Young Girl
-    garment_group_name: Jersey Fancy
-    detail_desc: Short-sleeved top in printed cotton jersey.
-    price: 0.0067627118644067
 
-이상치 커팅: 아직 수행 X
+제거 후 남는 주요 칼럼 예시:
+  product_code          예: 567992
+  product_type_name     예: T-shirt
+  product_group_name    예: Garment Upper body
+  index_group_name      예: Baby/Children
+  section_name          예: Young Girl
+  garment_group_name    예: Jersey Fancy
+  detail_desc           예: Short-sleeved top in printed cotton jersey.
+  price                 예: 0.0067627118644067
 
-문제1: garment_group_name, product_type_name이 서로 스타일을 나타내서 비슷하고, index_group_name, section_name 이 착용자의 성별, 나이를 나타냄. 
-중분류-소분류 관계인데 어떻게 처리할지(하나가 다른 하나에 포함관계)
-예를 들어, 여성복 - 여성 중간 가격대 시리즈
 
--> 소분류를 드랍하기로 결정 (section_name과 product_type_name column 드랍)
-만약 중분류만 사용하면 모델 성능이 처참할 가능성이 높고, 소분류를 사용하면 다른 데이터셋이랑 병합이 거의 불가능에 가까워짐
-우선은 다 놔두고 원핫인코딩으로 처리만 해놓음
+
+
+### Fashion 데이터셋 (dataset/fashion/fashion.csv)
+**데이터 규모**: 44,446개 행
+:
+- `id`: 제품 ID
+- `discountedPrice`: 할인가격
+- `brandName`: 브랜드명
+- `gender`: 성별 (Men, Women, Boys, Girls, Unisex) - 5개 고유값
+- `ageGroup`: 연령대 (Kids-Girls, Adults-Men 등)
+- `masterCategory`: 대분류 (Apparel, Accessories, Footwear, Personal Care, Free Items) - 7개 고유값
+- `subCategory`: 중분류 (Topwear, Shoes, Bags, Bottomwear, Watches 등) - 45개 고유값
+- `articleType`: 세부 품목 (Tshirts, Shirts, Casual Shoes, Watches, Sports Shoes 등) - 143개 고유값
+- `usage`: 용도 (Casual, Sports, Ethnic, Formal, Smart Casual 등) - 8개 고유값
+- `fashionType`: 패션 타입
+- `styleType`: 스타일 타입
+- `description`: 제품 설명 (HTML 태그 제거, 500자 제한)
+
+**제거된 칼럼들**:
+- 이미지 URL들 (불필요)
+- 원가격 (`price`)
+- 평점 (`myntraRating`)
+- 배송/결제 관련 정보 (`codEnabled`, `isEMIEnabled` 등)
+- 물리적 속성 (`weight`, `vat` 등)
+- 색상 정보 (`baseColour`, `colour1`, `colour2`)
+- 시즌/연도 (`season`, `year`)
+- 제품 식별자 (`variantName`, `articleNumber`, `displayCategories`, `productDisplayName`)
 
 
