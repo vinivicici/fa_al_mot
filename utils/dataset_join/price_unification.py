@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 가격 통일 스크립트
-H&M 데이터의 스케일링된 가격을 유로로 복원 후 달러로 변환
-Fashion 데이터는 이미 달러이므로 그대로 유지
+H&M과 Fashion 데이터의 가격을 590을 곱하여 정규화
+Kaggle 토론 참고: https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310496
 """
 
 import pandas as pd
@@ -13,8 +13,8 @@ def unify_prices():
     """가격 통일 함수"""
     print("=== 가격 통일 시작 ===")
     
-    # 환율 설정 (예시: 1 EUR = 1.1 USD)
-    EUR_TO_USD_RATE = 1.1
+    # 가격 정규화 계수 (Kaggle 토론 참고)
+    PRICE_NORMALIZATION_FACTOR = 590
     
     try:
         # H&M 데이터 로드
@@ -23,9 +23,9 @@ def unify_prices():
         print(f"   H&M 데이터: {len(hnm_df):,}개 행")
         
         # H&M 가격 통일
-        print("2. H&M 가격 통일 (스케일링된 값 → 유로 → 달러)...")
-        # 스케일링된 값 × 1000 = 유로, 유로 × 환율 = 달러
-        hnm_df['price_usd'] = hnm_df['price'] * 1000 * EUR_TO_USD_RATE
+        print("2. H&M 가격 통일 (스케일링된 값 × 590)...")
+        # 스케일링된 값 × 590 = 정규화된 가격
+        hnm_df['price_usd'] = hnm_df['price'] * PRICE_NORMALIZATION_FACTOR
         
         # 가격 통계 출력
         print(f"   원본 스케일링된 가격 범위: {hnm_df['price'].min():.6f} ~ {hnm_df['price'].max():.6f}")
@@ -37,8 +37,8 @@ def unify_prices():
         fashion_df = pd.read_csv('dataset/fashion/fashion.csv')
         print(f"   Fashion 데이터: {len(fashion_df):,}개 행")
         
-        # Fashion 가격 통일 (이미 달러이므로 그대로 사용)
-        print("4. Fashion 가격 통일 (이미 달러이므로 그대로 사용)...")
+        # Fashion 가격 통일 (원본 가격 그대로 사용)
+        print("4. Fashion 가격 통일 (원본 가격 그대로 사용)...")
         fashion_df['price_usd'] = fashion_df['discountedPrice']
         
         # 가격 통계 출력
@@ -70,10 +70,10 @@ def unify_prices():
         
         # 요약 정보 출력
         print("\n=== 가격 통일 완료 ===")
-        print(f"환율 적용: 1 EUR = {EUR_TO_USD_RATE} USD")
-        print(f"H&M 변환 공식: 스케일링된_가격 × 1000 × {EUR_TO_USD_RATE}")
-        print(f"Fashion 변환: 원본 달러 가격 그대로 사용")
-        print(f"최종 통일된 가격 단위: USD")
+        print(f"H&M 가격 정규화 계수: {PRICE_NORMALIZATION_FACTOR}")
+        print(f"H&M 변환 공식: 스케일링된_가격 × {PRICE_NORMALIZATION_FACTOR}")
+        print(f"Fashion 변환 공식: 원본_가격 그대로 사용")
+        print(f"최종 통일된 가격 단위: 혼합 (H&M 정규화, Fashion 원본)")
         
         return True
         
