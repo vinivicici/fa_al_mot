@@ -7,6 +7,7 @@ dataset/fashion/styles 폴더 내 개별 JSON 파일들을 하나의 CSV로 병�
 import os
 import json
 import pandas as pd
+import numpy as np
 
 
 def iter_json_files(directory: str):
@@ -68,14 +69,58 @@ def extract_core_data(json_data):
         import re
         desc = re.sub(r'<[^>]+>', '', desc)
         desc = re.sub(r'\s+', ' ', desc).strip()
-        core_data['description'] = desc[:500]  # 500자로 제한
+        desc = desc[:500]  # 500자로 제한
     else:
-        core_data['description'] = ''
+        desc = ''
+    
+    # 가격에 영향을 줄 수 있는 추가 정보를 description에 추가
+    additional_info = []
+    
+    # 브랜드 사용자 프로필 (가격 프리미엄 정보)
+    if 'brandUserProfile' in data and data['brandUserProfile']:
+        brand_profile = data['brandUserProfile']
+        if isinstance(brand_profile, dict):
+            # brandUserProfile 내부의 주요 정보 추출
+            if 'name' in brand_profile:
+                additional_info.append(f"brandUserProfile: {brand_profile['name']}")
+        elif isinstance(brand_profile, str):
+            additional_info.append(f"brandUserProfile: {brand_profile}")
+    
+    # 평점 (신뢰도/품질 지표, 가격에 영향)
+    if 'myntraRating' in data and data['myntraRating']:
+        rating = data['myntraRating']
+        if isinstance(rating, dict):
+            if 'averageRating' in rating:
+                additional_info.append(f"myntraRating: {rating['averageRating']}")
+        elif pd.notna(rating):
+            additional_info.append(f"myntraRating: {rating}")
+    
+    # 원본 가격 (discountedPrice와 비교 가능)
+    if 'price' in data and data['price']:
+        price = data['price']
+        if isinstance(price, (int, float)) and price > 0:
+            additional_info.append(f"price: {price}")
+    
+    # 부가세 정보 (최종 가격에 영향)
+    if 'vat' in data and data['vat']:
+        vat = data['vat']
+        if isinstance(vat, (int, float)) and vat > 0:
+            additional_info.append(f"vat: {vat}")
+    
+    # description에 추가 정보 병합
+    if additional_info:
+        additional_text = "\n".join(additional_info)
+        if desc:
+            core_data['description'] = f"{desc}\n\n{additional_text}"
+        else:
+            core_data['description'] = additional_text
+    else:
+        core_data['description'] = desc
     
     return core_data
 
 def build_fashion_csv(styles_dir: str = "dataset/fashion/styles",
-                      output_csv: str = "dataset/fashion/fashion.csv",
+                      output_csv: str = "dataset/fashion/fashion_1_raw.csv",
                       write_chunk_size: int = 1000) -> bool:
     print("=== Build fashion.csv from styles/*.json (핵심 정보만 추출) ===")
     print(f"입력 폴더: {styles_dir}")

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 가격 통일 스크립트
-H&M과 Fashion 데이터의 가격을 590을 곱하여 정규화
-Kaggle 토론 참고: https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310496
+H&M과 Fashion 데이터의 가격을 정규화
 """
 
 import pandas as pd
@@ -13,8 +12,9 @@ def unify_prices():
     """가격 통일 함수"""
     print("=== 가격 통일 시작 ===")
     
-    # 가격 정규화 계수 (Kaggle 토론 참고)
-    PRICE_NORMALIZATION_FACTOR = 590
+    # 가격 정규화 계수
+    HNM_NORMALIZATION_FACTOR = 678.5
+    FASHION_NORMALIZATION_FACTOR = 0.011
     
     try:
         # H&M 데이터 로드
@@ -23,23 +23,23 @@ def unify_prices():
         print(f"   H&M 데이터: {len(hnm_df):,}개 행")
         
         # H&M 가격 통일
-        print("2. H&M 가격 통일 (스케일링된 값 × 590)...")
-        # 스케일링된 값 × 590 = 정규화된 가격
-        hnm_df['price_usd'] = hnm_df['price'] * PRICE_NORMALIZATION_FACTOR
+        print("2. H&M 가격 통일 (스케일링된 값 × 678.5)...")
+        # 스케일링된 값 × 678.5 = 정규화된 가격
+        hnm_df['price_usd'] = hnm_df['price'] * HNM_NORMALIZATION_FACTOR
         
         # 가격 통계 출력
         print(f"   원본 스케일링된 가격 범위: {hnm_df['price'].min():.6f} ~ {hnm_df['price'].max():.6f}")
         print(f"   변환된 달러 가격 범위: ${hnm_df['price_usd'].min():.2f} ~ ${hnm_df['price_usd'].max():.2f}")
         print(f"   변환된 달러 가격 평균: ${hnm_df['price_usd'].mean():.2f}")
         
-        # Fashion 데이터 로드
+        # Fashion 데이터 로드 (column_drop 후 생성된 파일)
         print("3. Fashion 데이터 로딩...")
-        fashion_df = pd.read_csv('dataset/fashion/fashion.csv')
+        fashion_df = pd.read_csv('dataset/fashion/fashion_3_columndrop.csv')
         print(f"   Fashion 데이터: {len(fashion_df):,}개 행")
         
-        # Fashion 가격 통일 (원본 가격 그대로 사용)
-        print("4. Fashion 가격 통일 (원본 가격 그대로 사용)...")
-        fashion_df['price_usd'] = fashion_df['discountedPrice']
+        # Fashion 가격 통일
+        print("4. Fashion 가격 통일 (원본 가격 × 0.011)...")
+        fashion_df['price_usd'] = fashion_df['discountedPrice'] * FASHION_NORMALIZATION_FACTOR
         
         # 가격 통계 출력
         print(f"   Fashion 달러 가격 범위: ${fashion_df['price_usd'].min():.2f} ~ ${fashion_df['price_usd'].max():.2f}")
@@ -64,16 +64,17 @@ def unify_prices():
         print(f"   H&M 통일된 데이터 저장: {hnm_output_path}")
         
         # Fashion 결과 저장
-        fashion_output_path = 'dataset/fashion/fashion_unified.csv'
+        fashion_output_path = 'dataset/fashion/fashion_pricied.csv'
         fashion_df.to_csv(fashion_output_path, index=False)
         print(f"   Fashion 통일된 데이터 저장: {fashion_output_path}")
         
         # 요약 정보 출력
         print("\n=== 가격 통일 완료 ===")
-        print(f"H&M 가격 정규화 계수: {PRICE_NORMALIZATION_FACTOR}")
-        print(f"H&M 변환 공식: 스케일링된_가격 × {PRICE_NORMALIZATION_FACTOR}")
-        print(f"Fashion 변환 공식: 원본_가격 그대로 사용")
-        print(f"최종 통일된 가격 단위: 혼합 (H&M 정규화, Fashion 원본)")
+        print(f"H&M 가격 정규화 계수: {HNM_NORMALIZATION_FACTOR}")
+        print(f"H&M 변환 공식: 스케일링된_가격 × {HNM_NORMALIZATION_FACTOR}")
+        print(f"Fashion 가격 정규화 계수: {FASHION_NORMALIZATION_FACTOR}")
+        print(f"Fashion 변환 공식: 원본_가격 × {FASHION_NORMALIZATION_FACTOR}")
+        print(f"최종 통일된 가격 단위: 정규화됨")
         
         return True
         
