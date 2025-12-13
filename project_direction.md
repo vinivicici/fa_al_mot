@@ -1,3 +1,39 @@
+## Fashion 전처리: 제거 대상 서브카테고리 목록
+
+다음 서브카테고리들은 비핵심/비패션 또는 분석 목적과 무관하다고 판단되어 제거합니다. (표시 근거: `fashion_column_observation/fashion_subCategory_details.csv` 3번째 컬럼의 `O` 표기)
+
+- Watches (2,542)
+- Jewellery (1,080)
+- Eyewear (1,073)
+- Fragrance (1,012)
+- Socks (698)
+- Lips (527)
+- Saree (427)
+- Nails (329)
+- Makeup (307)
+- Accessories (143)
+- Apparel Set (106)
+- Free Gifts (104)
+- Skin Care (77)
+- Skin (69)
+- Eyes (43)
+- Shoe Accessories (24)
+- Sports Equipment (21)
+- Hair (19)
+- Bath and Body (12)
+- Water Bottle (7)
+- Perfumes (6)
+- Umbrellas (6)
+- Beauty Accessories (4)
+- Wristbands (4)
+- Sports Accessories (3)
+- Home Furnishing (1)
+- Vouchers (1)
+
+비고:
+- `Free Gifts`, `Vouchers`, `Home Furnishing`, `Water Bottle` 등은 패션 제품이 아니므로 우선 제거 권장
+- 뷰티/그루밍(`Fragrance`, `Lips`, `Makeup`, `Skin Care`, `Eyes`, `Hair`, `Bath and Body`, `Perfumes`, `Beauty Accessories`)도 패션 가격 모델에서 제외 권장
+- 액세서리 계열(`Watches`, `Jewellery`, `Eyewear`, `Shoe Accessories`, `Wristbands`, `Sports Accessories`)은 분석 목적에 따라 포함/제외 결정 가능하나, 현재 표시는 제거
 files:
 1. h&m
 2. fashion images
@@ -68,9 +104,9 @@ usage: Casual
 productDisplayName: Puma Women Solid Black Jackets
 ```
 
-4. 칼럼 셀렉션 (utils/hnm_column_drop.py 방식 참고)
+4. 칼럼/행 정리 (코드 기준)
 
-제거할 칼럼 목록(실제로 존재하는 컬럼만 제거, 미존재 컬럼은 무시):
+칼럼 드롭 목록(실제로 존재하는 컬럼만 제거, 미존재 컬럼은 무시):
   - prod_name
   - article_id
   - product_type_no
@@ -89,19 +125,29 @@ productDisplayName: Puma Women Solid Black Jackets
   - index_group_no
   - section_no
   - garment_group_no
+  - section_name
+  - product_type_name
+  - product_group_name  (별도 스크립트에서 추가 제거)
+
+행 정리(값 기준 필터링):
+  - section_name 제외 값: *Womens Small accessories, Womens Lingerie, Men Underwear, Girls Underwear & Basics, Boys Underwear & Basics
+  - product_group_name 제외 값: Accessories, Underwear, Swimwear, Socks & Tights, Cosmetic, Bags, Furniture, Garment and Shoe care, Stationery, Interior textile, Fun
+  - garment_group_name 제외 값: Accessories, Socks and Tights
 
 제거 후 남는 주요 칼럼 예시:
   product_code          예: 567992
-  product_type_name     예: T-shirt
-  product_group_name    예: Garment Upper body
   index_group_name      예: Baby/Children
-  section_name          예: Young Girl
-  garment_group_name    예: Jersey Fancy
+  garment_group_name    예: Jersey Fancy (일부 값은 행 필터로 제외됨)
   detail_desc           예: Short-sleeved top in printed cotton jersey.
-  price                 예: 0.0067627118644067
+  price                 예: 0.032 (원본 스케일링된 값)
 
 
-
+1. 칼럼 제거 판단근거: 색상 등 가격에 영향을 미치지 않는 요소는 제외. (같은 제품 다른 색상 = 같은 가격을 확인)
+  중분류와 소분류중 중분류만 남김. 이는 다른 데이터셋과 합치기 위함.
+2. 로우 제거 판단근거: 
+  의류 데이터셋을 만들고자하므로 속옷, 악세서리를 제외함. 
+  젠더에 스포츠가 있어서 값의 개수를 확인해본결과 1%정도여서 그냥 날림.(잘못 기록된 데이터로 판단)
+  그림이나 설명이 없는 로우는 드랍.
 
 ### Fashion 데이터셋 (dataset/fashion/fashion.csv)
 **데이터 규모**: 44,446개 행
@@ -119,14 +165,10 @@ productDisplayName: Puma Women Solid Black Jackets
 - `styleType`: 스타일 타입
 - `description`: 제품 설명 (HTML 태그 제거, 500자 제한)
 
-**제거된 칼럼들**:
-- 이미지 URL들 (불필요)
-- 원가격 (`price`)
-- 평점 (`myntraRating`)
-- 배송/결제 관련 정보 (`codEnabled`, `isEMIEnabled` 등)
-- 물리적 속성 (`weight`, `vat` 등)
-- 색상 정보 (`baseColour`, `colour1`, `colour2`)
-- 시즌/연도 (`season`, `year`)
-- 제품 식별자 (`variantName`, `articleNumber`, `displayCategories`, `productDisplayName`)
+**제거된 칼럼들(코드 기준)**:
+- `meta.code`, `meta.requestId`
+- 색상/시즌: `baseColour`, `colour1`, `colour2`, `season`, `year`
+- 식별/표시: `variantName`, `articleNumber`, `displayCategories`, `productDisplayName`
 
-
+2. 카테고리 매핑
+  /utils/dataset_join/readme.md 참조

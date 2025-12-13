@@ -39,6 +39,40 @@ def drop_columns():
             for col in missing_columns:
                 print(f"  - {col}")
         
+        # description에 소분류 정보와 브랜드 추가
+        print("\ndescription에 추가 정보 병합 중...")
+        if 'detail_desc' in df.columns:
+            def enrich_description(row):
+                original_desc = str(row.get('detail_desc', '')) if pd.notna(row.get('detail_desc')) else ''
+                
+                # 추가할 정보 수집
+                additions = []
+                
+                # section_name 추가
+                if 'section_name' in row and pd.notna(row['section_name']):
+                    additions.append(f"section_name: {row['section_name']}")
+                
+                # product_type_name 추가
+                if 'product_type_name' in row and pd.notna(row['product_type_name']):
+                    additions.append(f"product_type_name: {row['product_type_name']}")
+                
+                # 브랜드 추가 (항상 HNM)
+                additions.append("brand: HNM")
+                
+                # description에 추가 정보 병합
+                if additions:
+                    additional_info = "\n".join(additions)
+                    if original_desc:
+                        enriched_desc = f"{original_desc}\n\n{additional_info}"
+                    else:
+                        enriched_desc = additional_info
+                    return enriched_desc
+                else:
+                    return original_desc
+            
+            df['detail_desc'] = df.apply(enrich_description, axis=1)
+            print("  [완료] section_name, product_type_name, brand 정보를 description에 추가했습니다.")
+        
         # 칼럼 제거
         df_dropped = df.drop(columns=existing_columns_to_drop)
         

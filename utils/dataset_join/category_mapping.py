@@ -11,21 +11,38 @@ from datetime import datetime
 def create_mapping_tables():
     """매핑 테이블 생성"""
     
-    # 성별 매핑 테이블
+    # 성별 매핑 테이블 (woman, man, unisex)
     gender_mapping = {
         # H&M 매핑
-        'HNM_Ladieswear': 'Women',
-        'HNM_Menswear': 'Men', 
-        'HNM_Baby/Children': 'Children',
-        'HNM_Divided': 'Unisex',
-        'HNM_Sport': 'Sports',
+        'HNM_Ladieswear': 'woman',
+        'HNM_Menswear': 'man',
+        'HNM_Baby/Children': 'unisex',
+        'HNM_Divided': 'unisex',
+        'HNM_Sport': 'unisex',
         
         # Fashion 매핑
-        'FASHION_Women': 'Women',
-        'FASHION_Men': 'Men',
-        'FASHION_Girls': 'Children',
-        'FASHION_Boys': 'Children',
-        'FASHION_Unisex': 'Unisex'
+        'FASHION_Women': 'woman',
+        'FASHION_Men': 'man',
+        'FASHION_Girls': 'woman',
+        'FASHION_Boys': 'man',
+        'FASHION_Unisex': 'unisex'
+    }
+
+    # 연령 매핑 테이블 (children, teen, adult)
+    age_mapping = {
+        # H&M 매핑
+        'HNM_Ladieswear': 'adult',
+        'HNM_Menswear': 'adult',
+        'HNM_Baby/Children': 'children',
+        'HNM_Divided': 'teen',
+        'HNM_Sport': 'adult',
+        
+        # Fashion 매핑
+        'FASHION_Women': 'adult',
+        'FASHION_Men': 'adult',
+        'FASHION_Girls': 'teen',
+        'FASHION_Boys': 'teen',
+        'FASHION_Unisex': 'adult'
     }
     
     # 카테고리 매핑 테이블
@@ -75,7 +92,7 @@ def create_mapping_tables():
         'FASHION_Home': 'Home'
     }
     
-    return gender_mapping, category_mapping, usage_mapping
+    return gender_mapping, age_mapping, category_mapping, usage_mapping
 
 def apply_mappings():
     """매핑 적용 함수"""
@@ -83,7 +100,7 @@ def apply_mappings():
     
     try:
         # 매핑 테이블 생성
-        gender_mapping, category_mapping, usage_mapping = create_mapping_tables()
+        gender_mapping, age_mapping, category_mapping, usage_mapping = create_mapping_tables()
         
         # H&M 데이터 로드
         print("1. H&M 데이터 로딩...")
@@ -93,9 +110,12 @@ def apply_mappings():
         # H&M 매핑 적용
         print("2. H&M 매핑 적용...")
         
-        # 성별 매핑
+        # 성별/연령 매핑
         hnm_df['normalized_gender'] = hnm_df['index_group_name'].apply(
-            lambda x: gender_mapping.get(f'HNM_{x}', 'Unknown')
+            lambda x: gender_mapping.get(f'HNM_{x}', 'unknown')
+        )
+        hnm_df['normalized_age'] = hnm_df['index_group_name'].apply(
+            lambda x: age_mapping.get(f'HNM_{x}', 'unknown')
         )
         
         # 카테고리 매핑
@@ -110,15 +130,18 @@ def apply_mappings():
         
         # Fashion 데이터 로드
         print("3. Fashion 데이터 로딩...")
-        fashion_df = pd.read_csv('dataset/fashion/fashion_unified.csv')
+        fashion_df = pd.read_csv('dataset/fashion/fashion_pricied.csv')
         print(f"   Fashion 데이터: {len(fashion_df):,}개 행")
         
         # Fashion 매핑 적용
         print("4. Fashion 매핑 적용...")
         
-        # 성별 매핑
+        # 성별/연령 매핑
         fashion_df['normalized_gender'] = fashion_df['gender'].apply(
-            lambda x: gender_mapping.get(f'FASHION_{x}', 'Unknown')
+            lambda x: gender_mapping.get(f'FASHION_{x}', 'unknown')
+        )
+        fashion_df['normalized_age'] = fashion_df['gender'].apply(
+            lambda x: age_mapping.get(f'FASHION_{x}', 'unknown')
         )
         
         # 카테고리 매핑 (articleType 기반)
@@ -136,6 +159,8 @@ def apply_mappings():
         
         print("   H&M 성별 분포:")
         print(hnm_df['normalized_gender'].value_counts())
+        print("   H&M 연령 분포:")
+        print(hnm_df['normalized_age'].value_counts())
         
         print("   H&M 카테고리 분포:")
         print(hnm_df['normalized_category'].value_counts())
@@ -145,6 +170,8 @@ def apply_mappings():
         
         print("   Fashion 성별 분포:")
         print(fashion_df['normalized_gender'].value_counts())
+        print("   Fashion 연령 분포:")
+        print(fashion_df['normalized_age'].value_counts())
         
         print("   Fashion 카테고리 분포:")
         print(fashion_df['normalized_category'].value_counts())

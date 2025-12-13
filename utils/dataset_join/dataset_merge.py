@@ -31,6 +31,7 @@ def merge_datasets():
             'dataset_source': hnm_df['dataset_source'],
             'price_usd': hnm_df['price_usd'],
             'normalized_gender': hnm_df['normalized_gender'],
+            'normalized_age': hnm_df['normalized_age'],  # 연령 정보 추가
             'normalized_category': hnm_df['normalized_category'],
             'normalized_usage': hnm_df['normalized_usage'],
             'description': hnm_df['detail_desc'],
@@ -44,6 +45,7 @@ def merge_datasets():
             'dataset_source': fashion_df['dataset_source'],
             'price_usd': fashion_df['price_usd'],
             'normalized_gender': fashion_df['normalized_gender'],
+            'normalized_age': fashion_df['normalized_age'],  # 연령 정보 추가
             'normalized_category': fashion_df['normalized_category'],
             'normalized_usage': fashion_df['normalized_usage'],
             'description': fashion_df['description'],
@@ -69,6 +71,9 @@ def merge_datasets():
         
         print("   통일된 성별 분포:")
         print(merged_df['normalized_gender'].value_counts())
+        
+        print("   통일된 연령 분포:")
+        print(merged_df['normalized_age'].value_counts())
         
         print("   통일된 카테고리 분포:")
         print(merged_df['normalized_category'].value_counts())
@@ -124,6 +129,10 @@ def merge_datasets():
             f.write("\n통일된 성별 분포:\n")
             for gender, count in merged_df['normalized_gender'].value_counts().items():
                 f.write(f"  {gender}: {count:,}개 ({count/final_count*100:.1f}%)\n")
+            
+            f.write("\n통일된 연령 분포:\n")
+            for age, count in merged_df['normalized_age'].value_counts().items():
+                f.write(f"  {age}: {count:,}개 ({count/final_count*100:.1f}%)\n")
             
             f.write("\n통일된 카테고리 분포:\n")
             for category, count in merged_df['normalized_category'].value_counts().items():

@@ -52,7 +52,7 @@ python utils/dataset_join/dataset_merge.py
 
 ### 중간 파일들
 - `dataset/hnm/articles_with_price_unified.csv` - H&M 가격 통일 완료
-- `dataset/fashion/fashion_unified.csv` - Fashion 가격 통일 완료
+- `dataset/fashion/fashion_pricied.csv` - Fashion 가격 통일 완료
 - `dataset/hnm/articles_with_price_mapped.csv` - H&M 매핑 완료
 - `dataset/fashion/fashion_mapped.csv` - Fashion 매핑 완료
 
@@ -100,9 +100,8 @@ python utils/dataset_join/dataset_merge.py
 
 ## 가격 통일
 
-- **H&M**: 스케일링된 값 × 1000 × 1.1 = 달러
-- **Fashion**: 원본 달러 가격 그대로 사용
-- **환율**: 1 EUR = 1.1 USD (설정 가능)
+- **H&M**: 스케일링된 값 × 678.5
+- **Fashion**: 원본 가격 × 0.011
 
 ## 문제 해결
 

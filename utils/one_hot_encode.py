@@ -44,9 +44,14 @@ def one_hot_encode_categories():
             unique_values = df[col].unique()[:5]  # 처음 5개 값만 표시
             print(f"  - {col}: {unique_count}개 고유값 {unique_values}")
         
-        # 원핫인코딩 전 다른 칼럼들 저장
-        non_categorical_columns = [col for col in df.columns if col not in existing_columns]
-        df_other = df[non_categorical_columns].copy()
+        # 원핫인코딩 전 다른 칼럼들 저장 (original_gender, original_category 제외)
+        columns_to_drop = ['original_gender', 'original_category']
+        existing_drop_columns = [col for col in columns_to_drop if col in df.columns]
+        columns_to_keep = [col for col in df.columns if col not in existing_columns and col not in columns_to_drop]
+        
+        if existing_drop_columns:
+            print(f"\n   제거할 칼럼들: {existing_drop_columns}")
+        df_other = df[columns_to_keep].copy()
         
         print(f"\n3. 원핫인코딩 수행 중...")
         
@@ -70,7 +75,8 @@ def one_hot_encode_categories():
         
         print(f"\n4. 인코딩 완료!")
         print(f"  - 원본 칼럼 수: {df.shape[1]}")
-        print(f"  - 제거된 칼럼: {len(existing_columns)}개")
+        print(f"  - 원핫인코딩 대상 제거: {len(existing_columns)}개")
+        print(f"  - original 칼럼 제거: {len(existing_drop_columns)}개")
         print(f"  - 추가된 칼럼: {total_encoded_columns}개")
         print(f"  - 최종 칼럼 수: {df_final.shape[1]}")
         print(f"  - 최종 데이터 크기: {df_final.shape[0]:,} 행 x {df_final.shape[1]} 칼럼")

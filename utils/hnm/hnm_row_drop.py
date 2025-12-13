@@ -4,7 +4,6 @@ articles_with_price.csv 전처리 스크립트
 - 특정 section_name 값을 가진 행 제거 (악세서리, 속옷)
 - 특정 product_group_name 값을 가진 행 제거 (속옷, 수영복, 양말, 화장품, 가방, 가구 등)
 - 특정 garment_group_name 값을 가진 행 제거 (악세서리, 양말)
-- 가격 스케일링 (1000배로 실제 가격으로 변환)
 """
 
 import pandas as pd
@@ -149,67 +148,11 @@ def remove_specific_garment_groups():
         traceback.print_exc()
         return False
 
-def rescale_price(scale_factor=1000):
-    """
-    스케일된 price 값을 실제 가격으로 변환
-    
-    분석 결과:
-    - 원본 데이터의 price는 개인정보 보호를 위해 1000으로 나눠진 값
-    - 예: 0.01899 -> 18.99 (탱크톱 ~8, 브라 10-20, 바지 22-30)
-    - H&M은 스웨덴 회사이므로 유로 또는 SEK(스웨덴 크로나)일 가능성 높음
-    """
-    print(f"\n=== price 칼럼 스케일링 (x{scale_factor}) ===")
-    
-    try:
-        # CSV 파일 로드
-        print("CSV 파일 로딩 중...")
-        df = pd.read_csv('dataset/hnm/articles_with_price.csv')
-        print(f"데이터 크기: {df.shape[0]:,} 행 x {df.shape[1]} 칼럼")
-        
-        # 원본 가격 통계
-        print(f"\n원본 price 통계:")
-        print(f"  - 최소값: {df['price'].min():.6f}")
-        print(f"  - 평균값: {df['price'].mean():.6f}")
-        print(f"  - 중간값: {df['price'].median():.6f}")
-        print(f"  - 최대값: {df['price'].max():.6f}")
-        
-        # 가격 스케일링
-        df['price'] = df['price'] * scale_factor
-        
-        # 스케일링 후 가격 통계
-        print(f"\n스케일링 후 price 통계:")
-        print(f"  - 최소값: {df['price'].min():.2f}")
-        print(f"  - 평균값: {df['price'].mean():.2f}")
-        print(f"  - 중간값: {df['price'].median():.2f}")
-        print(f"  - 최대값: {df['price'].max():.2f}")
-        
-        # 샘플 확인
-        print(f"\n샘플 제품 가격:")
-        sample = df[['product_type_name', 'price']].head(10)
-        for idx, row in sample.iterrows():
-            print(f"  - {row['product_type_name']}: {row['price']:.2f}")
-        
-        # 결과 저장
-        output_file = 'dataset/hnm/articles_with_price.csv'
-        df.to_csv(output_file, index=False)
-        print(f"\n[완료] 가격 스케일링 완료!")
-        print(f"결과가 '{output_file}'에 저장되었습니다.")
-        
-        return True
-        
-    except Exception as e:
-        print(f"[오류] 오류 발생: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
 if __name__ == "__main__":
     # 1단계: 특정 section_name 행 제거
     if remove_specific_sections():
         # 2단계: 특정 product_group_name 행 제거
         if remove_specific_product_groups():
             # 3단계: 특정 garment_group_name 행 제거
-            if remove_specific_garment_groups():
-                # 4단계: 가격 스케일링
-                rescale_price()
+            remove_specific_garment_groups()
 

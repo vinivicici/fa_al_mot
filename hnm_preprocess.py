@@ -6,7 +6,7 @@ articles.csv와 transactions_train.csv를 전처리하여 최종 데이터셋 �
 실행 순서:
 1. hnm_join.py - articles.csv + transactions 가격 데이터 JOIN 및 product_code별 병합
 2. hnm_column_drop.py - 불필요한 칼럼 제거
-3. hnm_row_drop.py - 불필요한 행 제거 (악세서리, 속옷 등) + 가격 스케일링
+3. hnm_row_drop.py - 불필요한 행 제거 (악세서리, 속옷 등)
 4. hnm_column_split_densify.py - product_group_name 칼럼 제거
 """
 
@@ -80,7 +80,7 @@ def main():
     scripts = [
         ("utils/hnm/hnm_join.py", "1. JOIN - articles + 가격 데이터 병합"),
         ("utils/hnm/hnm_column_drop.py", "2. COLUMN DROP - 불필요한 칼럼 제거"),
-        ("utils/hnm/hnm_row_drop.py", "3. ROW DROP - 불필요한 행 제거 + 가격 스케일링"),
+        ("utils/hnm/hnm_row_drop.py", "3. ROW DROP - 불필요한 행 제거"),
         ("utils/hnm/hnm_column_split_densify.py", "4. COLUMN SPLIT - product_group_name 제거"),
     ]
     

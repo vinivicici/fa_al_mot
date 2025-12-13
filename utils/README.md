@@ -19,25 +19,17 @@ transactions_train.csv에서 article_id별 평균 가격 계산 후 articles.csv
 - 25개 칼럼 to 8개 칼럼
 
 ### `hnm_row_drop.py`
-불필요한 카테고리 제거 및 가격 정규화
+불필요한 카테고리 제거
 
 - **section_name**: 속옷, 악세서리 제거
 - **product_group_name**: 신발 제외한 비의류 제거
 - **garment_group_name**: 악세서리, 양말 제거
-- **가격 스케일링**: x1000 (0.029 to 29.0)
 
 ### `hnm_column_split_densify.py`
 중복 정보 칼럼 제거
 
 - product_group_name 칼럼 삭제
 
-### `hnm_one_hot_encode.py`
-카테고리 칼럼 원핫인코딩
-
-- 대상: product_type_name, garment_group_name, index_group_name, section_name
-- 4개 칼럼 to 약 121개 이진 칼럼
-
-## [분석] 데이터 분석 도구 (observation/)
 
 ### `analyze_product_columns.py`
 H&M 제품 칼럼 분석

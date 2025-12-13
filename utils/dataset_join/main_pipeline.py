@@ -126,7 +126,7 @@ def main():
     
     final_files = [
         'dataset/hnm/articles_with_price_unified.csv',
-        'dataset/fashion/fashion_unified.csv',
+        'dataset/fashion/fashion_pricied.csv',
         'dataset/hnm/articles_with_price_mapped.csv',
         'dataset/fashion/fashion_mapped.csv',
         'dataset/merged_dataset.csv',
