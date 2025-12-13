@@ -105,32 +105,6 @@
 
 ---
 
-## 📊 실험 결과 요약 (Performance Summary)
-
-### Classification Performance (F1-Score)
-
-| Model           | Type   | Gender   | Category | Usage    | 비고                   |
-| --------------- | ------ | -------- | -------- | -------- | -------------------- |
-| **CLIP Fusion** | **DL** | **0.86** | **0.83** | **0.50** | **Best Performance** |
-| XGBoost         | ML     | 0.85     | 0.79     | 0.51     | High Efficiency      |
-| Multimodal CNN  | DL     | 0.68     | 0.68     | 0.39     |                      |
-| ResNet50 (Img)  | DL     | 0.53     | 0.53     | 0.37     |                      |
-
----
-
-### Regression Performance ($R^2$ & Time)
-
-| Experiment           | Model                 | $R^2$      | RMSE       | Time (sec) | 비고                |
-| -------------------- | --------------------- | ---------- | ---------- | ---------- | ----------------- |
-| **Exp 1 (Meta+Emb)** | **Advanced MLP (DL)** | **0.8904** | **382.63** | **190s**   | **SOTA, Fastest** |
-| Exp 1 (Meta+Emb)     | LightGBM (ML)         | 0.8364     | 467.57     | 2,133s     |                   |
-| Exp 1 (Meta+Emb)     | Linear Reg (ML)       | 0.7456     | 583.04     | 74s        | Baseline          |
-
-> **Insight**
-> 고차원 패션 데이터(Embedding) 처리에는
-> **GPU 기반 딥러닝**이 성능과 효율성 모두에서
-> 머신러닝(Tree 기반)을 압도함을 확인했습니다.
-
 ---
 
 ## 🛠 설치 및 실행 방법 (Installation & Usage)
@@ -194,4 +168,5 @@ python regression_ML.py
  ┣ 📜 regression_DL_SOTA.py
  ┗ 📜 regression_ML.py
 ```
+
 
